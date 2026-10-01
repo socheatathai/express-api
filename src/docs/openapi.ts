@@ -1,9 +1,9 @@
 export const openApiDocument = {
   openapi: '3.0.3',
   info: {
-    title: 'Ecommerce API',
+    title: 'Example API',
     version: '1.0.0',
-    description: 'API foundation for the planned ecommerce application.',
+    description: 'A domain-neutral Express API starter.',
   },
   servers: [{ url: '/api/v1' }],
   paths: {

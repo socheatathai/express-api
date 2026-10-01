@@ -1,6 +1,6 @@
-# Ecommerce API Foundation
+# Example API Foundation
 
-TypeScript, Express, PostgreSQL, and Prisma foundation for an ecommerce API. Business features are intentionally not implemented yet.
+TypeScript, Express, PostgreSQL, and Prisma foundation for a domain-neutral API. Business features are intentionally not implemented yet.
 
 ## Requirements
 
@@ -31,10 +31,27 @@ The API listens on `http://localhost:3000` by default. Swagger UI is at `http://
 - `npm run db:generate` generates Prisma Client after schema changes.
 - `npm run db:migrate` creates and applies development migrations.
 - `npm run db:studio` opens Prisma Studio.
+- `npm run deploy:up` builds and starts the API, Nginx, and PostgreSQL containers.
+- `npm run deploy:down` stops the deployment containers without deleting database data.
+
+## Container deployment
+
+```sh
+cp .env.example .env
+# Set strong, unique database credentials in .env before deployment.
+npm run deploy:up
+```
+
+Nginx is available at `http://localhost:8080` by default and forwards traffic to the API on the private Compose network. Set `NGINX_PORT=80` in `.env` to bind Nginx to port 80 on a server. PostgreSQL is not publicly exposed; its host port is bound to loopback for local development only. The API uses `DATABASE_URL_DOCKER` to reach the `db` service, while local development uses `DATABASE_URL` on `localhost`.
+
+This starter serves HTTP only. Configure TLS certificates and HTTPS in Nginx or terminate TLS at a trusted load balancer before exposing it publicly. Use deployment-specific secrets rather than the development values in `.env.example`.
 
 ## Structure
 
 ```text
+Dockerfile               Multi-stage, non-root production API image
+docker-compose.yml       API, Nginx, and PostgreSQL services
+nginx/default.conf       Reverse proxy configuration
 src/
   app.ts                 Express app and Swagger setup
   server.ts              Environment loading and server startup
@@ -47,8 +64,8 @@ prisma/                  Prisma schema and migrations
 test/                    API tests
 ```
 
-## Ecommerce build plan
+## Example API roadmap
 
-Planned feature areas, not implemented: identity and accounts, product catalog, inventory, cart, checkout and payments, orders, shipping, and administration. Build these incrementally after agreeing on requirements; each area should add its schema, service, routes, and tests without putting business logic in route handlers.
+The starter currently implements only a health endpoint. Add domain-specific modules after defining their requirements; keep request validation, business logic, persistence, and HTTP routing in separate layers, and cover each behavior with tests and OpenAPI documentation.
 
 The initial Prisma schema is intentionally empty. Add domain models only when their requirements are defined, then use `npm run db:migrate` to create migrations.
