@@ -1,0 +1,7 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "env": true,
+        "docker compose": true,
+        "npx tsx": true
+    }
+}
