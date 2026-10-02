@@ -4,3 +4,7 @@ coverage/
 dist/
 src/generated/prisma/
 .DS_Store
+uploads/payment-proofs/
+perf/k6/results/*.json
+*.md
+!README.md
